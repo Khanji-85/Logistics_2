@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            direction: rtl;
+        }
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          display: none; /* Initially hide the table */
+        }
+    
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+    
+        th {
+          background-color: #f2f2f2;
+        }
+    
+        button {
+          margin-bottom: 20px;
+        }
+      </style>
+    
+</head>
+<body >
+    <div class="table" dir="ltr">
+        <h1> {{ table_name }}</h1>
+        <button id="showTableBtn">Show Table</button>
+        <table id="viewTable">
+          <thead>
+            <tr>
+              {% for heading in headings %}
+              <th>{{ heading }}</th>
+              {% endfor %}
+              <th> Update & delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+              
+            <tr>
+              {% for value in row %}
+              <td>{{ value }}</td>
+              {% endfor %}
+              <td>  <a href="#">update</a>
+                    <a href="#">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <script>
+          document.getElementById('showTableBtn').addEventListener('click', function() {
+            document.getElementById('viewTable').style.display = 'table';
+          });
+        </script>
+      </div>
+</body>
+</html>

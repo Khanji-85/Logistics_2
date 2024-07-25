@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% with headings=headings, data=data, table_name=table_name %}
+{% include 'base-table-view.html' %}
+{% endwith %}
+
+<hr>
+
+<h1>القطاع الصحي</h1>
+  <form method="POST">
+    <div class="form-group">
+      <label for="name">الاسم</label>
+      <input type="text" class="form-control" id="name" name="name">
+
+        <label for="name">الشهرة</label>
+      <input type="text" class="form-control" id="last_name" name="last_name">
+
+        <label for="name">اسم الأب</label>
+      <input type="text" class="form-control" id="father_name" name="father_name">
+
+        <label for="name">اسم الأم</label>
+      <input type="text" class="form-control" id="mother_name" name="mother_name">
+
+    </div>
+
+      <div class="form-group">
+      <label for="name">تاريخ الولادة</label>
+      <input type="date" class="form-control" id="date" name="date">
+
+        <label for="name">الجنس</label>
+         <select class="form-control" id="gender-select" name="gender">
+                    {% for gender in genders_list %}
+                        <option value="{{ gender }}">{{ gender }}</option>
+                    {% endfor %}
+                </select>
+
+        <label for="name">الجنسية</label>
+          <select class="form-control" id="natio-select" name="nationality">
+                    {% for nationality in nationalities_list %}
+                        <option value="{{ nationality }}">{{ nationality }}</option>
+                    {% endfor %}
+                </select>
+
+
+    </div>
+
+
+      <div class="form-group">
+      <label for="name">رقم السجل</label>
+      <input type="text" class="form-control" id="ssn" onkeyup="fetchData()" name="ssn">
+
+        <label for="name">الحالة</label>
+          <select class="form-control" id="status-select" name="status">
+                        <option value="empty">choice #1</option>
+              <option value="empty">choice #2</option>
+              <option value="empty">choice #3</option>
+
+                </select>
+
+          <label for="name">البلدة</label>
+          <select class="form-control" id="status2-select" name="status2">
+                        <option value="empty">choice #1</option>
+              <option value="empty">choice #2</option>
+              <option value="empty">choice #3</option>
+
+                </select>
+
+          <label for="name">القضاء</label>
+          <select class="form-control" id="status3-select" name="status3">
+                        <option value="empty">choice #1</option>
+              <option value="empty">choice #2</option>
+              <option value="empty">choice #3</option>
+
+                </select>
+
+    </div>
+
+      <div class="form-group">
+      <label for="name">نوع الخدمة</label>
+      <input type="text" class="form-control" id="service" name="service">
+
+        <label for="name">القيمة</label>
+      <input type="text" class="form-control" id="amount" name="amount">
+
+    </div>
+
+
+      <div class="form-group">
+      <label for="name">الهاتف</label>
+      <input type="text" class="form-control" id="phone" name="phone">
+
+        <label for="name">المؤسسة</label>
+      <input type="text" class="form-control" id="hospital" name="hospital">
+
+    </div>
+
+
+      <div class="form-group">
+      <label for="name">المرجع</label>
+      <input type="text" class="form-control" id="reference" name="reference">
+
+        <label for="name">تم ادخاله بواسطة</label>
+      <input type="text" class="form-control" id="employee" name="employee">
+
+    </div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Add User</button>
+  </form>
+<table id="resultsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>first Name</th>
+                <th>last name</th>
+                <th>father name</th>
+                <th>register number</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+<script>
+        function fetchData() {
+            const query = document.getElementById('ssn').value;
+            if (query.length === 0) {
+                document.getElementById('resultsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+                return;
+            }
+
+            fetch('http://127.0.0.1:5000/get-shateb?q=' + query)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = ''; // Clear existing results
+                    data.forEach(item => {
+                        const row = tbody.insertRow();
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+                        const cell4 = row.insertCell(3);
+                        const cell5 = row.insertCell(4);
+                        cell1.textContent = item.id;
+                        cell2.textContent = item.first_name;
+                        cell3.textContent = item.last_name;
+                        cell4.textContent = item.father_name;
+                        cell5.textContent = item.reg_number;
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    </script>
+
+
+{% endblock %}
